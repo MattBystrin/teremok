@@ -1,0 +1,12 @@
+spring:
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        password: pass123
+        url: jdbc:postgresql://localhost:5432/teremok
+        username: user
+    jpa:
+        hibernate:
+            ddl-auto: create
+    sql:
+        init:
+            mode: always
