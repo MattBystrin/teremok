@@ -8,6 +8,7 @@ psql -c 'select * from tokens'
 psql -c 'select id, user_id, expired, revoked, token_type from tokens'
 
 # Users
+psql -c '\d users'
 psql -c 'select * from users'
 psql -c 'select id, email, role, specie from users'
 

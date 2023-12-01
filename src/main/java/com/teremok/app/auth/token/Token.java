@@ -1,4 +1,4 @@
-package com.teremok.app.auth;
+package com.teremok.app.auth.token;
 
 import com.teremok.app.user.User;
 
@@ -25,22 +25,22 @@ import lombok.NoArgsConstructor;
 @Table(name = "tokens")
 public class Token {
 
-  @Id
-  @GeneratedValue
-  public Integer id;
+	@Id
+	@GeneratedValue
+	public Integer id;
 
-  @Column(unique = true)
-  public String token;
+	@Column(unique = true)
+	public String token;
 
-  @Builder.Default
-  @Enumerated(EnumType.STRING)
-  public TokenType tokenType = TokenType.BEARER;
+	@Builder.Default
+	@Enumerated(EnumType.STRING)
+	public TokenType tokenType = TokenType.BEARER;
 
-  public boolean revoked;
+	public boolean revoked;
 
-  public boolean expired;
+	public boolean expired;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  public User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	public User user;
 }

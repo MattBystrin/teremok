@@ -1,6 +1,6 @@
 package com.teremok.app.user;
 
-import com.teremok.app.token.Token;
+import com.teremok.app.auth.token.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -30,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 public class User implements UserDetails {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String firstname;
@@ -44,11 +45,12 @@ public class User implements UserDetails {
 	private String pass;
 
 	@Builder.Default
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 
-	// @OneToMany(mappedBy = "user")
-	// private List<Token> tokens;
+	@OneToMany(mappedBy = "user")
+	private List<Token> tokens;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

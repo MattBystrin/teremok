@@ -26,7 +26,8 @@ public class AppApplication {
 				.pass("root")
 				.email("admin@mail.ru")
 				.build();
-
+			System.out.println("Admin email: admin@mail.ru");
+			System.out.println("Admin pass: root");
 			System.out.println("Admin token: " + service.register(admin).getAccessToken());
 		};
 	}

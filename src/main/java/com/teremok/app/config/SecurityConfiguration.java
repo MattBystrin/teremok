@@ -43,14 +43,15 @@ public class SecurityConfiguration {
 		.cors(AbstractHttpConfigurer::disable)
 		.csrf(AbstractHttpConfigurer::disable)
 		.authorizeHttpRequests(req ->
-			req.requestMatchers(WHITE_LIST_URL)
+			req.anyRequest().permitAll()
+			/* req.requestMatchers(WHITE_LIST_URL)
 			.permitAll()
 			.requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(Role.ADMIN.name())
 			.requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(Role.ADMIN.name())
 			.requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(Role.ADMIN.name())
 			.requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(Role.ADMIN.name())
 			.anyRequest()
-			.authenticated()
+			.authenticated() */
 		)
 		.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
 		.authenticationProvider(authenticationProvider)
