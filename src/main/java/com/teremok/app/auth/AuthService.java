@@ -1,9 +1,9 @@
 package com.teremok.app.auth;
 
-import com.teremok.app.user.Role;
 import com.teremok.app.user.User;
 import com.teremok.app.user.UserRepository;
 import com.teremok.app.auth.token.*;
+import com.teremok.app.hostel.species.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,16 +25,18 @@ import java.io.IOException;
 public class AuthService {
 	private final UserRepository repository;
 	private final TokenRepository tokenRepository;
+	private final SpecieRepository specieRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 
 	public AuthResponse register(RegisterRequest request) {
+		Specie defaultSpecie = specieRepository.findById(1L).get();
 		var user = User.builder()
 			.firstname(request.getFirstname())
 			.lastname(request.getLastname())
 			.email(request.getEmail())
-			.specie("None")
+			.specie(defaultSpecie)
 			.pass(passwordEncoder.encode(request.getPass()))
 			.build();
 		var savedUser = repository.save(user);

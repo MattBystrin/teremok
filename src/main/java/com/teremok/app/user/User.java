@@ -1,6 +1,7 @@
 package com.teremok.app.user;
 
 import com.teremok.app.auth.token.*;
+import com.teremok.app.hostel.species.Specie;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,6 +17,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -37,8 +40,6 @@ public class User implements UserDetails {
 	private String firstname;
 	private String lastname;
 
-	@Column(nullable = false)
-	private String specie;
 	@Column(nullable = false, unique = true)
 	private String email;
 	@Column(nullable = false)
@@ -51,6 +52,10 @@ public class User implements UserDetails {
 
 	@OneToMany(mappedBy = "user")
 	private List<Token> tokens;
+
+	@ManyToOne
+	@JoinColumn(name = "specie", nullable = false)
+	private Specie specie;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
