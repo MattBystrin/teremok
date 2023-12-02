@@ -11,18 +11,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import com.teremok.app.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.teremok.app.hostel.rooms.Room;
 
-//@Table(name = "book_records", uniqueConstraints = { @UniqueConstraint(columnNames = { "arrival", "departure", "room" }) })
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "book_records")
+@Table(name = "book_records", uniqueConstraints = {
+	@UniqueConstraint(columnNames = {
+		"arrival",
+		"departure",
+		"room" 
+	}) 
+})
 public class BookRecord {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

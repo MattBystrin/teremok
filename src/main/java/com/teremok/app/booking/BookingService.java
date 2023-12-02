@@ -20,12 +20,17 @@ public class BookingService {
 	
 	@Transactional
 	public void reserveBook(BookRequest request, User user) throws Exception {
-		if (!validateDates(request))
-			throw new Exception("Ivalid date range");
-
 		LocalDate arrival = request.getArrival();
 		LocalDate departure = request.getDeparture();
 		Room room = roomRepository.findById(request.getRoom()).get();
+
+		if (!validateDates(arrival, departure))
+			throw new Exception("Ivalid date range");
+
+		// TODO
+		// if (!roomRepository.isCompatible(request.getRoom(), user.getSpecie()))
+		// 	throw new Exception("Room not compatible with user specie");
+
 
 		BookRecord bookRecord = BookRecord.builder()
 			.arrival(arrival)
@@ -40,10 +45,7 @@ public class BookingService {
 			throw new Exception("Room is unavailable");
 	}
 
-	private Boolean validateDates(BookRequest request) {
-		LocalDate arrival = request.getArrival();
-		LocalDate departure = request.getDeparture();
-
+	private Boolean validateDates(LocalDate arrival, LocalDate departure) {
 		if (arrival.isBefore(LocalDate.now()))
 			return false;
 		if (departure.isBefore(arrival) || departure.isEqual(arrival))
