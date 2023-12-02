@@ -1,4 +1,4 @@
-package com.teremok.app.hostel.rooms;
+package com.teremok.app.hostel.furniture;
 
 import java.util.List;
 
@@ -11,21 +11,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "room_types")
-public class RoomType {
+@Table(name = "furniture_types")
+public class FurnitureType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	private String label;
+	private String name;
 	private Long cost;
-	private Long capacity;
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "type")
-	private List<Room> rooms;
+	private List<Furniture> furniture;
 };
