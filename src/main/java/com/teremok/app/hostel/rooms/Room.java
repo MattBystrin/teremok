@@ -24,6 +24,6 @@ public class Room {
 	@JoinColumn(name = "type", nullable = false)
 	private RoomType type;
 
-	// @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
+	// @OneToMany(mappedBy = "room")
 	// private List<Furniture> furniture;
 };
