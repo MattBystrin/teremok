@@ -33,4 +33,12 @@ public class UserService {
 		// save the new password
 		repository.save(user);
 	}
+
+	public User getUser(Long id) {
+		return repository.findById(id).get();
+	}
+
+	public Iterable<User> getByRole(String role) {
+		return repository.findByRole(role);
+	}
 }

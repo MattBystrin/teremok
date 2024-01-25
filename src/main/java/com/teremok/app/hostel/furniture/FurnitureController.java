@@ -15,12 +15,12 @@ public class FurnitureController {
 	private final FurnitureService service;
 
 	@GetMapping("/{id}")
-	public Furniture findById(@PathVariable Long id) {
-		return service.findById(id);
+	public Furniture getById(@PathVariable Long id) {
+		return service.getById(id);
 	}
 
 	@GetMapping("/room/{room}")
-	public Iterable<Furniture> findByRoom(@PathVariable Long room) {
-		return service.findByRoom(room);
+	public Iterable<Furniture> getByRoom(@PathVariable Long room) {
+		return service.getByRoom(room);
 	}
 };

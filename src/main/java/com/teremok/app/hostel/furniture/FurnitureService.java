@@ -9,11 +9,17 @@ import lombok.RequiredArgsConstructor;
 public class FurnitureService {
 	private final FurnitureRepository repository;
 
-	public Iterable<Furniture> findByRoom(Long room) {
+	public Iterable<Furniture> getByRoom(Long room) {
 		return repository.findByRoom(room);
 	}
 
-	public Furniture findById(Long furniture) {
-		return repository.findById(furniture).get();
+	public Furniture getById(Long id) {
+		return repository.findById(id).get();
+	}
+
+	public void updateState(Long id, Long diff) {
+		Furniture furniture = repository.findById(id).get();
+		furniture.setState(furniture.getState() - diff);
+		repository.save(furniture);
 	}
 };

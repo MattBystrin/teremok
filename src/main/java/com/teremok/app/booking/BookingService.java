@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.teremok.app.hostel.rooms.Room;
 import com.teremok.app.hostel.rooms.RoomRepository;
+import com.teremok.app.hostel.rooms.RoomService;
 import com.teremok.app.user.User;
 
 import jakarta.transaction.Transactional;
@@ -16,21 +17,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookingService {
 	private final BookRecordRepository bookRecordRepository;
-	private final RoomRepository roomRepository;
+	private final RoomService roomService;
 	
 	@Transactional
 	public void reserveBook(BookRequest request, User user) throws Exception {
 		LocalDate arrival = request.getArrival();
 		LocalDate departure = request.getDeparture();
-		Room room = roomRepository.findById(request.getRoom()).get();
+		Room room = roomService.getRoom(request.getRoom());
+		
 
 		if (!validateDates(arrival, departure))
 			throw new Exception("Ivalid date range");
 
-		// TODO
-		// if (!roomRepository.isCompatible(request.getRoom(), user.getSpecie()))
-		// 	throw new Exception("Room not compatible with user specie");
-
+		// if (roomService.isCompatible(request.getRoom(), user.getSpecie().getId()))
+		// 	throw new Exception("User not allowed to book this room");
 
 		BookRecord bookRecord = BookRecord.builder()
 			.arrival(arrival)

@@ -20,9 +20,11 @@ insert into room_compatible(specie, room_type) values (1, 2);
 insert into room_compatible(specie, room_type) values (1, 3);
 insert into room_compatible(specie, room_type) values (2, 4);
 
-insert into users(email, firstname, lastname, pass, role, specie) values ('user@mail.ru', 'User', 'Userov', 'open_pass', 'USER', 'None');
+insert into users(email, firstname, lastname, pass, role, specie) values ('user@mail.ru', 'User', 'Userov', 'open_pass', 'USER', 1);
 
 insert into book_records(arrival, departure, room, uid) values ('2023-11-11', '2023-11-15', 1, 1);
 insert into book_records(arrival, departure, room, uid) values ('2023-11-24', '2023-11-28', 1, 1);
 insert into book_records(arrival, departure, room, uid) values ('2023-11-14', '2023-11-25', 3, 1);
 insert into book_records(arrival, departure, room, uid) values ('2023-11-13', '2023-11-17', 5, 1);
+
+insert into clean_tasks(date, ready, room_id, user_id) values ('2024-01-24', false, 1, 1);

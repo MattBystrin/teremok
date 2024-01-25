@@ -22,7 +22,7 @@ public class BookingController {
 
 	@PostMapping("/reserve")
 	public ResponseEntity<HttpStatus> reserve(@RequestBody BookRequest book_record) throws Exception {
-		User user = userRepository.findById(1).get();
+		User user = userRepository.findById(1L).get();
 
 		bookingService.reserveBook(book_record, user);
 
