@@ -1,3 +1,15 @@
+# Tokens
+psql -c 'select * from tokens'
+psql -c 'select id, user_id, expired, revoked, token_type from tokens'
+
+# Users
+psql -c '\d users'
+psql -c 'select * from users'
+psql -c 'select id, email, role, specie from users'
+
+psql -c "select * from users where role = 'USER'"
+psql -c "select * from users where role = 'ADMIN'"
+
 # Register
 curl -v -sS -X POST 'http://localhost:8080/api/v1/auth/register' -H 'Content-Type: application/json' \
 -d '{"firstname":"mihail", "lastname":"medvedev", "email":"mihamed@mail.ru", "pass":"1234"}'
