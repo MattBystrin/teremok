@@ -1,4 +1,4 @@
-package com.teremok.app.user;
+package com.teremok.app.auth;
 
 import lombok.Builder;
 import lombok.Getter;

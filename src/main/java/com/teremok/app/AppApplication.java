@@ -1,6 +1,7 @@
 package com.teremok.app;
 
 import com.teremok.app.user.Role;
+import com.teremok.app.user.UserService;
 import com.teremok.app.auth.AuthService;
 import com.teremok.app.auth.RegisterRequest;
 
@@ -17,18 +18,27 @@ public class AppApplication {
 	}
 
 	@Bean
-	public CommandLineRunner cmdRunner(AuthService service) {
+	public CommandLineRunner cmdRunner(AuthService authService, UserService userService) {
 		return args -> {
 			var admin = RegisterRequest.builder()
 				.firstname("Admin")
 				.lastname("Adminov")
-				.role(Role.ADMIN)
 				.pass("root")
+				.specie(1L)
 				.email("admin@mail.ru")
 				.build();
 			System.out.println("Admin email: admin@mail.ru");
 			System.out.println("Admin pass: root");
-			System.out.println("Admin token: " + service.register(admin).getAccessToken());
+			System.out.println("Admin token: " + authService.register(admin, Role.ADMIN).getAccessToken());
+
+			var cleaner = RegisterRequest.builder()
+				.firstname("Cleaner")
+				.lastname("Clinov")
+				.pass("clean")
+				.email("clean@mail.ru")
+				.specie(1L)
+				.build();
+			userService.addUser(cleaner, Role.CLEANER);
 		};
 	}
 }

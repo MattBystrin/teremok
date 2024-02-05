@@ -1,44 +1,60 @@
 package com.teremok.app.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import com.teremok.app.auth.RegisterRequest;
+import com.teremok.app.hostel.species.Specie;
+import com.teremok.app.hostel.species.SpecieRepository;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-	private final PasswordEncoder passwordEncoder;
 	private final UserRepository repository;
+	private final SpecieRepository specieRepository;
+	private final PasswordEncoder passwordEncoder;
 
-	public void changePassword(PasswdRequest request, Principal connectedUser) {
+	public User updatePassword(User user, String pass) {
+		user.setPass(passwordEncoder.encode(pass));
+		return repository.save(user);
+	}
 
-		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+	public User addUser(RegisterRequest request, Role role) {
+		Specie specie = specieRepository.findById(request.getSpecie()).get();
+		String password = passwordEncoder.encode(request.getPass());
+		User user = User.builder()
+			.firstname(request.getFirstname())
+			.lastname(request.getLastname())
+			.email(request.getEmail())
+			.specie(specie)
+			.pass(password)
+			.role(role)
+			.build();
 
-		// check if the current password is correct
-		if (!passwordEncoder.matches(request.getOldPass(), user.getPass())) {
-			throw new IllegalStateException("Wrong password");
-		}
-		// check if the two new passwords are the same
-		if (!request.getNewPass().equals(request.getConfirmPass())) {
-			throw new IllegalStateException("Password are not the same");
-		}
-
-		// update the password
-		user.setPass(passwordEncoder.encode(request.getNewPass()));
-
-		// save the new password
-		repository.save(user);
+		return repository.save(user);
 	}
 
 	public User getUser(Long id) {
 		return repository.findById(id).get();
 	}
 
+	public User getByEmail(String email) {
+		return repository.findByEmail(email).get();
+	}
+
 	public Iterable<User> getByRole(String role) {
 		return repository.findByRole(role);
+	}
+
+	public boolean checkPassword(User user, String pass) {
+		String upass = user.getPass();
+
+		if (upass.equals(passwordEncoder.encode(pass)))
+			return true;
+
+		return false;
 	}
 }

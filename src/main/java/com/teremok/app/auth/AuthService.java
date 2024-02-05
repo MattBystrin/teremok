@@ -1,9 +1,9 @@
 package com.teremok.app.auth;
 
 import com.teremok.app.user.User;
-import com.teremok.app.user.UserRepository;
+import com.teremok.app.user.Role;
+import com.teremok.app.user.UserService;
 import com.teremok.app.auth.token.*;
-import com.teremok.app.hostel.species.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,37 +12,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-	private final UserRepository repository;
 	private final TokenRepository tokenRepository;
-	private final SpecieRepository specieRepository;
-	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 
-	public AuthResponse register(RegisterRequest request) {
-		Specie defaultSpecie = specieRepository.findById(1L).get();
-		var user = User.builder()
-			.firstname(request.getFirstname())
-			.lastname(request.getLastname())
-			.email(request.getEmail())
-			.specie(defaultSpecie)
-			.pass(passwordEncoder.encode(request.getPass()))
-			.build();
-		var savedUser = repository.save(user);
-		var jwtToken = jwtService.generateToken(user);
-		var refreshToken = jwtService.generateRefreshToken(user);
-		saveUserToken(savedUser, jwtToken);
+	private final UserService userService;
+
+	public AuthResponse register(RegisterRequest request, Role role) {
+		User user = userService.addUser(request, role); 
+		String jwtToken = jwtService.generateToken(user);
+		String refreshToken = jwtService.generateRefreshToken(user);
+		saveUserToken(user, jwtToken);
 		return AuthResponse.builder()
 			.accessToken(jwtToken)
 			.refreshToken(refreshToken)
@@ -56,10 +44,9 @@ public class AuthService {
 				request.getPass()
 			)
 		);
-		var user = repository.findByEmail(request.getEmail())
-			.orElseThrow();
-		var jwtToken = jwtService.generateToken(user);
-		var refreshToken = jwtService.generateRefreshToken(user);
+		User user = userService.getByEmail(request.getEmail());
+		String jwtToken = jwtService.generateToken(user);
+		String refreshToken = jwtService.generateRefreshToken(user);
 		revokeAllUserTokens(user);
 		saveUserToken(user, jwtToken);
 		return AuthResponse.builder()
@@ -68,8 +55,21 @@ public class AuthService {
 			.build();
 	}
 
+	public void changePassword(PasswdRequest request, User user) {
+		if (!userService.checkPassword(user, request.getOldPass())) {
+			throw new IllegalStateException("Wrong password");
+		}
+		if (!request.getNewPass().equals(request.getConfirmPass())) {
+			throw new IllegalStateException("Password are not the same");
+		}
+
+		String pass = request.getNewPass();
+
+		userService.updatePassword(user, pass);
+	}
+
 	private void saveUserToken(User user, String jwtToken) {
-		var token = Token.builder()
+		Token token = Token.builder()
 			.user(user)
 			.token(jwtToken)
 			.tokenType(TokenType.BEARER)
@@ -80,7 +80,7 @@ public class AuthService {
 	}
 
 	private void revokeAllUserTokens(User user) {
-		var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+		List<Token> validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
 		if (validUserTokens.isEmpty())
 			return;
 		validUserTokens.forEach(token -> {
@@ -105,8 +105,7 @@ public class AuthService {
 		refreshToken = authHeader.substring(7);
 		userEmail = jwtService.extractUsername(refreshToken);
 		if (userEmail != null) {
-			var user = this.repository.findByEmail(userEmail)
-				.orElseThrow();
+			User user = userService.getByEmail(userEmail);
 			if (jwtService.isTokenValid(refreshToken, user)) {
 				var accessToken = jwtService.generateToken(user);
 				revokeAllUserTokens(user);

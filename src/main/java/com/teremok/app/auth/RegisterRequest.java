@@ -1,6 +1,5 @@
 package com.teremok.app.auth;
 
-import com.teremok.app.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +14,5 @@ public class RegisterRequest {
 	private String lastname;
 	private String email;
 	private String pass;
-	private Role role;
+	private Long specie;
 }
