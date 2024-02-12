@@ -2,6 +2,9 @@ package com.teremok.app.hostel.rooms;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -26,6 +29,12 @@ public class RoomType {
 	private Long capacity;
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "type")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(mappedBy = "type")
 	private List<Room> rooms;
+
+	@JsonIgnore
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(mappedBy = "room_type")
+	private List<RoomCompatible> compatible;
 };

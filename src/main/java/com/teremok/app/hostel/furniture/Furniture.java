@@ -1,5 +1,8 @@
 package com.teremok.app.hostel.furniture;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.teremok.app.hostel.rooms.Room;
 
@@ -24,11 +27,13 @@ public class Furniture {
 	private Long state;
 
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "type", nullable = false)
 	private FurnitureType type;
 
 	@JsonIgnore
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "room", nullable = false)
 	private Room room;
 };

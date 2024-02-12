@@ -2,9 +2,11 @@ package com.teremok.app.hostel.furniture;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +27,7 @@ public class FurnitureType {
 	private Long cost;
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "type")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(mappedBy = "type")
 	private List<Furniture> furniture;
 };
