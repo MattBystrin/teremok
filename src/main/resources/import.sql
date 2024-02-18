@@ -11,6 +11,8 @@ insert into rooms(type) values (4);
 
 insert into furniture_types(cost, name) values (1, 'bed');
 insert into furniture(state, type, room) values (1, 1, 1);
+insert into furniture(state, type, room) values (1, 1, 1);
+insert into furniture(state, type, room) values (1, 1, 1);
 
 insert into species(name, description) values ('wolf', 'forest predator');
 insert into species(name, description) values ('rabbit', 'cutie');
