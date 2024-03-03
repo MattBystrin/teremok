@@ -34,7 +34,7 @@ public class CleaningReport {
 
 	@JsonIgnore
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@OneToMany(mappedBy = "id")
+	@OneToMany(mappedBy = "report")
 	private List<Diff> diffs;
 
 	private String comment;

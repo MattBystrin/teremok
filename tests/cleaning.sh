@@ -5,7 +5,7 @@ psql -c '\d clean_reports'
 # Send clean report
 curl -sS -X POST 'http://localhost:8080/api/v1/cleaning/report' \
 -H 'Content-Type: application/json' \
--d '{ "task":1, "diffs": [ {"id" :1, "diff": 1} ], "comment": "everything is fine" }'
+-d '{ "task":1, "diffs": [ {"id" :1, "diff": 1}, { "id" :2, "diff" :1} ], "comment": "everything is fine" }'
 
 # Get furniture from room
 curl -sS -X GET 'http://localhost:8080/api/v1/furniture/room/1' | json_pp

@@ -33,9 +33,12 @@ public class CleaningService {
 		return cleaningRepository.findByUser(id);
 	}
 
-	public void saveReport(ReportDTO report) {
+	public void saveReport(ReportDTO report) throws Exception {
 		CleaningTask task = cleaningRepository.findById(report.getTask()).get();
 		String comment = report.getComment();
+
+		if (report.getDiffs().isEmpty())
+			throw new Exception("Diffs empty");
 
 		CleaningReport clrep = CleaningReport.builder()
 			.task(task)

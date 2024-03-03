@@ -37,13 +37,13 @@ public class CleaningController {
 	}
 
 	@PostMapping("/report")
-	public ResponseEntity<String> saveReport(@RequestBody ReportDTO report) {
-		// try {
-		cleaningService.saveReport(report);
-		return ResponseEntity.ok("Report saved");
-		// } catch (Exception e) {
-		// 	e.printStackTrace(System.out);
-		// 	return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
-		// }
+	public ResponseEntity<?> saveReport(@RequestBody ReportDTO report) {
+		try {
+			cleaningService.saveReport(report);
+			return ResponseEntity.ok("Report saved");
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		}
 	}
 }
