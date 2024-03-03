@@ -45,7 +45,7 @@ public class UserService {
 		return repository.findByEmail(email).get();
 	}
 
-	public Iterable<User> getByRole(String role) {
+	public Iterable<User> getByRole(Role role) {
 		return repository.findByRole(role);
 	}
 
