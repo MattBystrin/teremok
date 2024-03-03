@@ -12,4 +12,4 @@ curl -v -sS -X POST 'http://localhost:8080/api/v1/booking/reserve' \
 
 curl -v -sS -X POST 'http://localhost:8080/api/v1/booking/reserve' \
 	-H 'Content-Type: application/json' \
--d '{"arrival":"2023-12-17", "departure":"2023-12-19", "room":1}'
+-d '{"arrival":"2024-12-17", "departure":"2024-12-19", "room":1}'

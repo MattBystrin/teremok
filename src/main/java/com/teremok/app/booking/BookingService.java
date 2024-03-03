@@ -22,7 +22,7 @@ public class BookingService {
 	private final NotificationService notificationService;
 	
 	@Transactional
-	public void reserveBook(BookRequest request, User user) throws Exception {
+	public BookRecord reserveBook(BookRequest request, User user) throws Exception {
 		LocalDate arrival = request.getArrival();
 		LocalDate departure = request.getDeparture();
 		Room room = roomService.getRoom(request.getRoom());
