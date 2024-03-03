@@ -2,10 +2,16 @@ version: "3.9"
 services:
   task1:
     image: "postgres:13"
+    restart: 'no'
     environment:
       POSTGRES_PASSWORD: pass123
       POSTGRES_USER: user
       POSTGRES_DB: teremok
     ports:
       - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
 
