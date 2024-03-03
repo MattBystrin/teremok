@@ -5,8 +5,9 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 
 import com.teremok.app.hostel.rooms.Room;
-import com.teremok.app.hostel.rooms.RoomRepository;
 import com.teremok.app.hostel.rooms.RoomService;
+import com.teremok.app.notify.NotificationService;
+import com.teremok.app.user.Role;
 import com.teremok.app.user.User;
 
 import jakarta.transaction.Transactional;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class BookingService {
 	private final BookRecordRepository bookRecordRepository;
 	private final RoomService roomService;
+	private final NotificationService notificationService;
 	
 	@Transactional
 	public void reserveBook(BookRequest request, User user) throws Exception {
@@ -39,10 +41,12 @@ public class BookingService {
 			.user(user)
 			.build();
 
-		if (bookRecordRepository.isRoomAvailable(arrival, departure, request.getRoom()))
-			bookRecordRepository.save(bookRecord);
-		else
+		if (bookRecordRepository.isRoomAvailable(arrival, departure, request.getRoom())) {
+			notificationService.notfiyRole(Role.ADMIN, "Booking created");
+			return bookRecordRepository.save(bookRecord);
+		} else
 			throw new Exception("Room is unavailable");
+
 	}
 
 	private Boolean validateDates(LocalDate arrival, LocalDate departure) {
