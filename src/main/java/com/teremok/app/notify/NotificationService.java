@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.teremok.app.user.Role;
 import com.teremok.app.user.User;
+import com.teremok.app.user.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class NotificationService {
 
 	private final NotificationRepository repository;
+	private final UserService userService;
 
 	public Iterable<Notification> getNotifications(User user) {
 		return repository.findByUser(user.getId());
@@ -36,7 +39,7 @@ public class NotificationService {
 		}
 	}
 
-	public void send(User user, String message) {
+	public void notify(User user, String message) {
 		Notification notification = Notification.builder()
 			.user(user)
 			.time(LocalTime.now())
@@ -44,4 +47,12 @@ public class NotificationService {
 			.build();
 		repository.save(notification);
 	}
+
+	public void notfiyRole(Role role, String message) {
+		Iterable<User> users = userService.getByRole(role);
+		for (User user : users) {
+			notify(user, message);
+		}
+	}
+
 }

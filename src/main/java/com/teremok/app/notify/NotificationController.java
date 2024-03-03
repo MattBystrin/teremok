@@ -48,7 +48,7 @@ public class NotificationController {
 	@PostMapping("/send/{id}")
 	public ResponseEntity<?> sendNotification(@PathVariable Long id) {
 		User user = userService.getUser(id);
-		notificationService.send(user, "Some test message");
+		notificationService.notify(user, "Some test message");
 		return ResponseEntity.ok().build();
 	}
 }
