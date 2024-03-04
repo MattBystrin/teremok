@@ -30,3 +30,7 @@ insert into book_records(arrival, departure, room, uid) values ('2023-11-14', '2
 insert into book_records(arrival, departure, room, uid) values ('2023-11-13', '2023-11-17', 5, 1);
 
 insert into clean_tasks(date, ready, room_id, user_id) values ('2024-01-24', false, 1, 1);
+
+insert into spa_types(duration, description, name) values (1, 'makes you relax', 'massage');
+insert into spa_compatible(specie_id, type_id) values (1, 1);
+insert into spa_records(date, time, empl_id, guest_id, type_id) values ('2024-06-20', '18:00', 1, 1, 1);
