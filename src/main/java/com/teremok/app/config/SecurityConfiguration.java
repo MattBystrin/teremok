@@ -14,8 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+import java.util.Arrays;
+import java.util.List;
 
 import com.teremok.app.user.Role;
 import static org.springframework.http.HttpMethod.GET;
@@ -40,8 +46,8 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-		.cors(AbstractHttpConfigurer::disable)
-		.csrf(AbstractHttpConfigurer::disable)
+		.cors().and()
+		//.csrf(AbstractHttpConfigurer::disable)
 		.authorizeHttpRequests(req ->
 			req.anyRequest().permitAll()
 			/* req.requestMatchers(WHITE_LIST_URL)
@@ -62,5 +68,16 @@ public class SecurityConfiguration {
 				.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
 		);
 		return http.build();
+	}
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		final CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }
