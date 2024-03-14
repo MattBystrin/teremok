@@ -1,7 +1,9 @@
 # Inspect database
 psql -c 'select * from species'
-
 curl -sS -X GET 'http://localhost:8080/api/v1/species' | json_pp
+# Auth as admin
+curl -sS -X POST 'http://localhost:8080/api/v1/auth/authenticate' -H 'Content-Type: application/json' \
+-d '{"email":"admin@mail.ru", "pass":"root"}' | sed 's/.*"access_token":"\(.*\)",.*/\1/' > /tmp/token
 
 # Rooms
 psql -c 'select * from rooms'
@@ -23,7 +25,10 @@ psql -c "select * from rooms where rooms.type in (select room_type from room_com
 
 curl -sS -X GET 'http://localhost:8080/api/v1/rooms' | json_pp
 curl -sS -X GET 'http://localhost:8080/api/v1/rooms/1' | json_pp
-curl -sS -X GET 'http://localhost:8080/api/v1/rooms/available/1/2023-12-14/2023-12-15' | json_pp
+curl -sS -X GET 'http://localhost:8080/api/v1/rooms/available/2023-12-14/2023-12-15' \
+	-H "Authorization: Bearer $(cat /tmp/token)" | json_pp
+curl -sS -X GET 'http://localhost:8080/api/v1/rooms/available/2024-12-17/2023-12-15' \
+	-H "Authorization: Bearer $(cat /tmp/token)" | json_pp
 
 # Furniture
 psql -c 'select * from furniture'
