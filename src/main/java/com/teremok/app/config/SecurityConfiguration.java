@@ -47,7 +47,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 		.cors().and()
-		//.csrf(AbstractHttpConfigurer::disable)
+		.csrf(AbstractHttpConfigurer::disable)
 		.authorizeHttpRequests(req ->
 			req.anyRequest().permitAll()
 			/* req.requestMatchers(WHITE_LIST_URL)
