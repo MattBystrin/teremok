@@ -34,7 +34,7 @@ class BookingTests {
 	void correctRequest() {
 		LocalDate arrival = LocalDate.parse("2025-02-20");
 		LocalDate departure = LocalDate.parse("2025-02-25");
-		BookRequest request = new BookRequest(arrival, departure, 1L);
+		BookRequest request = new BookRequest(arrival, departure, 2L);
 		User user = userRepository.findById(1L).get();
 		assertDoesNotThrow(() ->
 			bookingService.reserveBook(request, user)
@@ -75,7 +75,7 @@ class BookingTests {
 	void overlappingBook() {
 		LocalDate arrival = LocalDate.parse("2025-02-23");
 		LocalDate departure = LocalDate.parse("2025-02-28");
-		BookRequest request = new BookRequest(arrival, departure, 1L);
+		BookRequest request = new BookRequest(arrival, departure, 2L);
 		User user = userRepository.findById(1L).get();
 		try {
 			bookingService.reserveBook(request, user);

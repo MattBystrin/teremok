@@ -1,13 +1,15 @@
 package com.teremok.app.booking;
 
+import java.security.Principal;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.teremok.app.user.User;
-import com.teremok.app.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,14 +19,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/v1/booking")
 @RequiredArgsConstructor
 public class BookingController {
+
 	private final BookingService bookingService;
-	private final UserRepository userRepository;
 
 	@PostMapping("/reserve")
-	public ResponseEntity<HttpStatus> reserve(@RequestBody BookRequest book_record) throws Exception {
-		User user = userRepository.findById(1L).get();
-
-		bookingService.reserveBook(book_record, user);
+	public ResponseEntity<HttpStatus> reserve(
+		@RequestBody BookRequest book_record,
+		Principal principal
+	) throws Exception {
+		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		try {
+			bookingService.reserveBook(book_record, user);
+		}
+		catch (Exception e) {
+			System.out.println(e.toString());
+			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		}
+	
 
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}

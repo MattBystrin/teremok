@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class BookRequest {
 	private LocalDate arrival;
 	private LocalDate departure;
-	private Long room;
+	private Long type;
 };

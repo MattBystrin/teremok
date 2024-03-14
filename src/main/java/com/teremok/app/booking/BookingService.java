@@ -25,14 +25,21 @@ public class BookingService {
 	public BookRecord reserveBook(BookRequest request, User user) throws Exception {
 		LocalDate arrival = request.getArrival();
 		LocalDate departure = request.getDeparture();
-		Room room = roomService.getRoom(request.getRoom());
-		
+		Long specie = user.getSpecie().getId();
+		Iterable<Room> rooms = roomService.findAvailableRoom(specie, arrival, departure);
+		Room room = null;
+		for (Room it : rooms) {
+			if (it.getType().getId() == request.getType()) {
+				room = it;
+				break;
+			}
+		}
 
 		if (!validateDates(arrival, departure))
 			throw new Exception("Ivalid date range");
 
-		// if (roomService.isCompatible(request.getRoom(), user.getSpecie().getId()))
-		// 	throw new Exception("User not allowed to book this room");
+		if (room == null)
+			throw new Exception("No rooms available");
 
 		BookRecord bookRecord = BookRecord.builder()
 			.arrival(arrival)
@@ -41,11 +48,8 @@ public class BookingService {
 			.user(user)
 			.build();
 
-		if (bookRecordRepository.isRoomAvailable(arrival, departure, request.getRoom())) {
-			notificationService.notfiyRole(Role.ADMIN, "Booking created");
-			return bookRecordRepository.save(bookRecord);
-		} else
-			throw new Exception("Room is unavailable");
+		notificationService.notfiyRole(Role.ADMIN, "Booking created");
+		return bookRecordRepository.save(bookRecord);
 
 	}
 
