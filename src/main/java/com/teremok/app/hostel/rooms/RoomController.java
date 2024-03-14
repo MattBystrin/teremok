@@ -1,11 +1,15 @@
 package com.teremok.app.hostel.rooms;
 
+import java.security.Principal;
 import java.time.LocalDate;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import com.teremok.app.user.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,12 +29,14 @@ public class RoomController {
 		return service.getRoom(room);
 	}
 
-	@GetMapping("/available/{specie}/{arrival}/{departure}")
-	public Iterable<Room> findAvailable(
-		@PathVariable Long specie, 
+	@GetMapping("/available/{arrival}/{departure}")
+	public Iterable<RoomType> findAvailable(
 		@PathVariable LocalDate arrival,
-		@PathVariable LocalDate departure)
-	{
+		@PathVariable LocalDate departure,
+		Principal principal
+	) {
+		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		Long specie = user.getSpecie().getId();
 		return service.findAvailable(specie, arrival, departure);
 	}
 };
