@@ -13,7 +13,7 @@ public interface CleaningRepository extends CrudRepository<CleaningTask, Long> {
 
 	@Query(
 		value =
-		"select * from clean_tasks where user = ?1",
+		"select * from clean_tasks where user_id = :uid",
 		nativeQuery = true
 	)
 	public Iterable<CleaningTask> findByUser(Long uid);

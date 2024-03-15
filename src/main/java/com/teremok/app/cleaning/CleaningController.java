@@ -1,5 +1,6 @@
 package com.teremok.app.cleaning;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import com.teremok.app.user.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,19 +25,25 @@ public class CleaningController {
 	private final CleaningService cleaningService;
 
 	@GetMapping("/queue")
-	public Iterable<CleaningTask> getQueue() {
+	public Iterable<CleaningTaskDTO> getQueue() {
 		return cleaningService.getQueue();
 	}
 
 	@PostMapping("/queue")
-	public ResponseEntity<String> addTask() {
-		cleaningService.addTask(1L);
+	public ResponseEntity<String> addTask(@RequestBody NewTaskDTO task) {
+		cleaningService.addTask(task);
 		return ResponseEntity.ok("Task added");
 	}
 
 	@GetMapping("/queue/employee/{id}")
-	public Iterable<CleaningTask> getEmployeeQueue(@PathVariable Long id) {
+	public Iterable<CleaningTaskDTO> getEmployeeQueue(@PathVariable Long id) {
 		return cleaningService.getEmployeeQueue(id);
+	}
+
+	@GetMapping("/queue/self")
+	public Iterable<CleaningTaskDTO> getSelfQueue(Principal principal) {
+		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		return cleaningService.getEmployeeQueue(user.getId());
 	}
 
 	@PostMapping("/report")

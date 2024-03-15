@@ -1,6 +1,9 @@
 package com.teremok.app.cleaning;
 
 import java.time.LocalDate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Service;
 
@@ -25,12 +28,19 @@ public class CleaningService {
 
 	private final Scheduler sched;
 
-	public Iterable<CleaningTask> getQueue() {
-		return cleaningRepository.findAll();
+	private Iterable<CleaningTaskDTO> mapToDTO(Iterable<CleaningTask> tasks) {
+		Iterable<CleaningTaskDTO> dtos = StreamSupport.stream(tasks.spliterator(), false)
+			.map(task -> CleaningTaskDTO.fromTask(task))
+			.collect(Collectors.toList());
+		return dtos;
 	}
 
-	public Iterable<CleaningTask> getEmployeeQueue(Long id) {
-		return cleaningRepository.findByUser(id);
+	public Iterable<CleaningTaskDTO> getQueue() {
+		return mapToDTO(cleaningRepository.findAll());
+	}
+
+	public Iterable<CleaningTaskDTO> getEmployeeQueue(Long uid) {
+		return mapToDTO(cleaningRepository.findByUser(uid));
 	}
 
 	public void saveReport(ReportDTO report) throws Exception {
@@ -61,14 +71,18 @@ public class CleaningService {
 		cleaningRepository.save(task);
 	}
 
-	public void addTask(Long room_id) {
-		Room room = roomService.getRoom(room_id);
+	public void addTask(NewTaskDTO task) {
+		Room room = roomService.getRoom(task.getRoom());
 		User user = sched.assignCleaning();
-		CleaningTask task = CleaningTask.builder()
+		LocalDate date = task.getDate() != null ? task.getDate()
+							: LocalDate.now();
+
+		CleaningTask newTask = CleaningTask.builder()
 			.room(room)
 			.user(user)
-			.date(LocalDate.now())
+			.date(date)
 			.build();
-		cleaningRepository.save(task);
+
+		cleaningRepository.save(newTask);
 	}
 };
