@@ -2,7 +2,6 @@ package com.teremok.app.cleaning;
 
 import java.time.LocalDate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Service;
@@ -73,7 +72,7 @@ public class CleaningService {
 
 	public void addTask(NewTaskDTO task) {
 		Room room = roomService.getRoom(task.getRoom());
-		User user = sched.assignCleaning();
+		User user = sched.getNext();
 		LocalDate date = task.getDate() != null ? task.getDate()
 							: LocalDate.now();
 

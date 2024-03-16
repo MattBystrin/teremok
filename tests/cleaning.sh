@@ -5,6 +5,7 @@ curl -sS -X POST 'http://localhost:8080/api/v1/auth/authenticate' -H 'Content-Ty
 psql -c '\d clean_tasks'
 psql -c 'select * from clean_tasks'
 psql -c '\d clean_reports'
+psql -c 'select * from clean_reports'
 
 # Send clean report
 curl -sS -X POST 'http://localhost:8080/api/v1/cleaning/report' \

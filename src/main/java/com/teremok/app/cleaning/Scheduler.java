@@ -4,6 +4,7 @@ import com.teremok.app.user.UserService;
 
 import org.springframework.stereotype.Service;
 
+import com.teremok.app.user.Role;
 import com.teremok.app.user.User;
 
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,10 @@ import lombok.RequiredArgsConstructor;
 public class Scheduler {
 	private final UserService userService;
 
-	// TODO: find all cleaners and find one with minimal tasks
-	public User assignCleaning() {
-		User user = userService.getUser(1L);
+	public User getNext() {
+		User user = userService.getByRole(Role.CLEANER)
+			.iterator()
+			.next();
 		return user;
 	}
 }
