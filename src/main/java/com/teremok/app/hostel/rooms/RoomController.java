@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.teremok.app.user.User;
 
@@ -35,7 +34,7 @@ public class RoomController {
 		@PathVariable LocalDate departure,
 		Principal principal
 	) {
-		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		User user = User.fromPrincipal(principal);
 		Long specie = user.getSpecie().getId();
 		return service.findAvailable(specie, arrival, departure);
 	}

@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.teremok.app.user.User;
 
@@ -27,7 +26,7 @@ public class BookingController {
 		@RequestBody BookRequest book_record,
 		Principal principal
 	) throws Exception {
-		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		User user = User.fromPrincipal(principal);
 		try {
 			bookingService.reserveBook(book_record, user);
 		}

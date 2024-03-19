@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -42,7 +41,7 @@ public class UserController {
 	public UserDTO getSelf(
 		Principal principal
 	) {
-		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		User user = User.fromPrincipal(principal);
 		return UserDTO.fromUser(user);
 	}
 }

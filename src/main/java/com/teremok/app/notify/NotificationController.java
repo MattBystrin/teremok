@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +28,7 @@ public class NotificationController {
 	public ResponseEntity<Iterable<Notification>> getNotifications(
 		Principal principal
 	) {
-		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		User user = User.fromPrincipal(principal);
 		System.out.println("User id: " + user.getId().toString());
 		Iterable<Notification> notifications = notificationService.getNotifications(user);
 		return ResponseEntity.ok(notifications);
@@ -40,7 +39,7 @@ public class NotificationController {
 		@RequestBody List<Long> ids,
 		Principal principal
 	) {
-		User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+		User user = User.fromPrincipal(principal);
 		notificationService.markNotifications(user, ids);
 		return ResponseEntity.ok().build();
 	}
