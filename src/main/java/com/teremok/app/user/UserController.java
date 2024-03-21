@@ -20,8 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 	private final UserService userService;
 
-	@PostMapping
-	@RequestMapping("/employees/add")
+	@GetMapping("/employees")
+	public Iterable<UserDTO> getEmployees() {
+		return userService.getEmployees();
+	}
+
+	@PostMapping("/employees/add")
 	public ResponseEntity<?> addEmployee(
 		@RequestBody AddRequest request
 	){

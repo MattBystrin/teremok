@@ -4,8 +4,6 @@ curl -sS -X POST 'http://localhost:8080/api/v1/auth/authenticate' -H 'Content-Ty
 psql -c 'select id, email, role, specie from users'
 psql -c 'select * from users'
 
-curl -sS -X GET 'http://localhost:8080/api/v1/users' | json_pp
-
 curl -sS -X GET 'http://localhost:8080/api/v1/users/roles' | json_pp
 
 curl -sS -X GET 'http://localhost:8080/api/v1/users/self' \

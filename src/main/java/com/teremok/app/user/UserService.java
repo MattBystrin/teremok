@@ -2,6 +2,10 @@ package com.teremok.app.user;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,13 @@ public class UserService {
 	private final UserRepository repository;
 	private final SpecieRepository specieRepository;
 	private final PasswordEncoder passwordEncoder;
+
+	private List<UserDTO> mapToDTO(Iterable<User> users) {
+		List<UserDTO> dtos = StreamSupport.stream(users.spliterator(), false)
+			.map(user -> UserDTO.fromUser(user))
+			.collect(Collectors.toList());
+		return dtos;
+	}
 
 	public User updatePassword(User user, String pass) {
 		user.setPass(passwordEncoder.encode(pass));
@@ -43,6 +54,14 @@ public class UserService {
 
 	public User getByEmail(String email) {
 		return repository.findByEmail(email).get();
+	}
+
+	public Iterable<UserDTO> getEmployees() {
+		List<UserDTO> employees = mapToDTO(getByRole(Role.ADMIN));
+		employees.addAll(mapToDTO(getByRole(Role.COOK)));
+		employees.addAll(mapToDTO(getByRole(Role.SPA)));
+		employees.addAll(mapToDTO(getByRole(Role.CLEANER)));
+		return employees;
 	}
 
 	public Iterable<User> getByRole(Role role) {
