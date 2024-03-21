@@ -34,3 +34,15 @@ insert into clean_tasks(date, ready, room_id, user_id) values ('2024-01-24', fal
 insert into spa_types(duration, description, name) values (1, 'makes you relax', 'massage');
 insert into spa_compatible(specie_id, type_id) values (1, 1);
 insert into spa_records(date, time, empl_id, guest_id, type_id) values ('2024-06-20', '18:00', 1, 1, 1);
+
+insert into dishes(name, price) values ('pizza', 3);
+insert into dishes(name, price) values ('rizotto', 2);
+insert into dishes(name, price) values ('ramen', 4);
+insert into dishes(name, price) values ('poke', 1);
+
+insert into dish_compatible(dish_id, specie_id) values (1, 1);
+insert into dish_compatible(dish_id, specie_id) values (2, 1);
+insert into dish_compatible(dish_id, specie_id) values (3, 1);
+insert into dish_compatible(dish_id, specie_id) values (4, 1);
+
+

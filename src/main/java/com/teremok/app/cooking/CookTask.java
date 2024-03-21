@@ -15,12 +15,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "cook_orders")
-public class CookOrder {
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Table(name = "cook_tasks")
+public class CookTask {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -36,7 +42,10 @@ public class CookOrder {
 	@Column(nullable = false)
 	private LocalDate date;
 
+	@Builder.Default
+	private Boolean ready = false;
+
 	@OneToMany
 	@JsonIgnore
-	private List<OrderPosition> positions;
+	private List<Order> positions;
 };
