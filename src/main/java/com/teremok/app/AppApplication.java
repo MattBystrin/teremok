@@ -39,6 +39,24 @@ public class AppApplication {
 				.specie(1L)
 				.build();
 			userService.addUser(cleaner, Role.CLEANER);
+
+			var spa = RegisterRequest.builder()
+				.firstname("Spa")
+				.lastname("Spanov")
+				.pass("spa")
+				.email("spa@mail.ru")
+				.specie(1L)
+				.build();
+			userService.addUser(spa, Role.SPA);
+
+			var cook = RegisterRequest.builder()
+				.firstname("Cook")
+				.lastname("Cookerov")
+				.pass("cook")
+				.email("cook@mail.ru")
+				.specie(1L)
+				.build();
+			userService.addUser(cook, Role.COOK);
 		};
 	}
 }
