@@ -12,7 +12,7 @@ psql -c "select * from users where role = 'ADMIN'"
 
 # Register
 curl -v -sS -X POST 'http://localhost:8080/api/v1/auth/register' -H 'Content-Type: application/json' \
--d '{"firstname":"mihail", "lastname":"medvedev", "email":"mihamed2@mail.ru", "pass":"1234"}'
+-d '{"firstname":"mihail", "lastname":"medvedev", "email":"mihamed2@mail.ru", "pass":"1234", "specie": 1}'
 
 # Auth
 curl -sS -X POST 'http://localhost:8080/api/v1/auth/authenticate' -H 'Content-Type: application/json' \
