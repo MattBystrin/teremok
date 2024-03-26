@@ -33,7 +33,7 @@ public class CookService {
 		return dishRepository.findCompatible(specie);
 	}
 
-	public void order(User user, List<OrderDTO> orders) {
+	public void order(User user, OrderDTO order) {
 		User empl = sched.getNext();	
 		LocalDate date = LocalDate.now();
 
@@ -45,15 +45,15 @@ public class CookService {
 
 		task = cookRepository.save(task);
 
-		for (OrderDTO dto : orders) {
-			Dish dish = dishRepository.findById(dto.getDish()).get();
-			Order order = Order.builder()
+		for (OrderDTO.Position pos : order.getPositions()) {
+			Dish dish = dishRepository.findById(pos.getDish()).get();
+			Order orderEntity = Order.builder()
 				.dish(dish)
-				.quanitiy(dto.getQntt())
+				.quanitiy(pos.getQuantity())
 				.task(task)
 				.build();
 
-			orderRepository.save(order);
+			orderRepository.save(orderEntity);
 		}
 	}
 

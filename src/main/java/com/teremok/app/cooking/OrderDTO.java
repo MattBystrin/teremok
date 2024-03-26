@@ -1,5 +1,7 @@
 package com.teremok.app.cooking;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
-	private Long dish;
-	private Long qntt;
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Position {
+		private Long dish;
+		private Long quantity;
+	}
+
+	private List<Position> positions;
 }

@@ -34,7 +34,7 @@ public class CookController {
 
 	@PostMapping("/order")
 	public ResponseEntity<?> order(
-		@RequestBody List<OrderDTO> order,
+		@RequestBody OrderDTO order,
 		Principal principal
 	) {
 		User user = User.fromPrincipal(principal);

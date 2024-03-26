@@ -19,7 +19,7 @@ curl -sS -X GET 'http://localhost:8080/api/v1/cooking/menu' \
 curl -sS -X POST 'http://localhost:8080/api/v1/cooking/order' \
 	-H "Authorization: Bearer $(cat /tmp/token)" \
 	-H 'Content-Type: application/json' \
--d '[{"dish":1, "qntt":1}, {"dish":2, "qntt": 2}]'
+-d '{"positions": [{"dish":1, "quantity":1}, {"dish":2, "quantity": 2}]}'
 
 curl -sS -X GET 'http://localhost:8080/api/v1/cooking/orders' | json_pp
 
